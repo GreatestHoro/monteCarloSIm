@@ -4,7 +4,7 @@ import numpy as np
 import csv
 import math
 import scipy.integrate as si
-import doctest 
+
 
 class monte_carlo():
     time = 46800
@@ -16,15 +16,17 @@ class monte_carlo():
     k = 0
     l = 0
     total = 0
-    prob = 0.
-    que = []
-    total_a = [0,16,33,61,41,25,10,8,6,0]
+    prob = 0 
+    number_of_planes = [0,16,33,61,41,25,10,8,6,0]
     start = [0,31,61,91,121,151,181,211,241,271]
     end = [30,60,90,120,150,180,210,240,270,300]
 
     def get_total(self):
-        for i in range(len(self.total_a)):
-            self.total += self.total_a[i]
+        for i in range(len(self.number_of_planes)):
+            self.total += self.number_of_planes[i]
+        a = self.total
+        return a
+
 
     def get_k(self, time):
         self.l = self.total/time
@@ -32,7 +34,27 @@ class monte_carlo():
         print (self.l, self.k, self.total)
 
     def probality_distribution(self):
+        """
+        This method calculates the poisson probability distribution, which is given by:
+            .. math:: f(k; \lambda)=\frac{\lambda^k e^{-\lambda}}{k!}
+        >>> m.get_total()
+        200
+        >>> m.probality_distribution()
+        0.0042552804023591835
+
+        Expecting:
+            200
+        ok
+        Trying:
+            m.probality_distribution()
+        Expecting:
+            0.0042552804023591835
+        ok
+        """
         self.prob = ((self.total * self.period/self.time)**self.planes)/(np.math.factorial(self.planes)) * 1/np.exp((self.total*self.planes)/self.time)
+        a = self.prob
+        np.random.poisson()
+        return a
 
     def simulation(self):
         prob_list = []
@@ -52,9 +74,9 @@ class monte_carlo():
         prob_interval = []
         prob_interval_adjusted = []
         u = np.random.uniform(0,1)
-        for i in range(len(self.total_a)):
-            temp = (self.total_a[i])/(30 * self.total)
-            temp2 = (self.total_a[i])/self.total_a
+        for i in range(len(self.number_of_planes)):
+            temp = (self.number_of_planes[i])/(30 * self.total)
+            temp2 = (self.number_of_planes[i])/self.total
             prob_interval.append(temp)
             prob_interval_adjusted.append(temp2)
             print("[", self.start[i],":", self.end[i],"]:", prob_interval_adjusted[i])
@@ -128,10 +150,11 @@ class monte_carlo():
     def run(self):
         self.get_total()
         self.probality_distribution()
-        self.simulation()
+        # self.simulation()
 
 
 if __name__ == '__main__':
-    doctest.testmod()
+    import doctest 
+    doctest.testmod(extraglobs={'m':monte_carlo()})
     m = monte_carlo()
     m.run()
