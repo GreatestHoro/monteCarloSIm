@@ -98,11 +98,12 @@ class monte_carlo():
         
         can_land = True
         que_size = []
-        
+        waiting_time = []
         for i in range(self.time):
-            if i == queue[0] and len(queue) != 0: 
-                queue.pop(0)
-                que_size.append(len(queue))
+            if len(queue) != 0:
+                if queue[0] == i : 
+                    queue.pop(0)
+                    que_size.append(len(queue))
             if landing_times[i] !=0:
                 if len(queue) == 0: 
                     self.time_x = i
@@ -114,6 +115,8 @@ class monte_carlo():
                 elif len(queue) != 0:
                     if queue[-1] >= i: 
                         diff = queue[-1] - i
+                        wait = diff + landing_times[i]
+                        waiting_time.append(wait)
                         q = diff + i + landing_times[i]
                         queue.append(q)
                         # if i == queue[0] and len(queue) != 0: 
@@ -147,10 +150,10 @@ class monte_carlo():
         #     prob_list.append(pois_dist)
         #     print ("pois dist: ", prob_list[i])
 
-        # plt.xlabel("Time")
-        # plt.ylabel("Probality")
-        # plt.plot(arrival)
-        # plt.show()
+        plt.xlabel("Time")
+        plt.ylabel("Probality")
+        plt.plot(que_size)
+        plt.show()
         
 
 
