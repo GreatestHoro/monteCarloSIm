@@ -100,6 +100,9 @@ class monte_carlo():
         que_size = []
         
         for i in range(self.time):
+            if i == queue[0] and len(queue) != 0: 
+                queue.pop(0)
+                que_size.append(len(queue))
             if landing_times[i] !=0:
                 if len(queue) == 0: 
                     self.time_x = i
